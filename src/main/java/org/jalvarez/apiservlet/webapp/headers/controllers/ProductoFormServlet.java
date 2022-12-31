@@ -93,7 +93,14 @@ public class ProductoFormServlet extends HttpServlet {
         } catch (DateTimeParseException e) {
             fecha = null;
         }
+        Long id;
+        try {
+            id = Long.parseLong(req.getParameter("id"));
+        } catch (NumberFormatException e) {
+            id = 0L;
+        }
         Producto producto = new Producto();
+        producto.setId(id);
         producto.setNombre(nombre);
         producto.setPrecio(precio);
         producto.setSku(sku);
@@ -112,10 +119,6 @@ public class ProductoFormServlet extends HttpServlet {
             req.setAttribute("producto", producto);
             getServletContext().getRequestDispatcher("/form.jsp").forward(req, resp);
 
-            // ultima actualzacion clase 454 modificamos el form para que
-            // se pueda editar los productos, incluyendo validaciones y que cuando
-            //agregamos un nuevo producto sin categoria no quede en null
-            // tambien al hacer click en agregar[+] los campos estan vacios y no en null
         }
     }
 }

@@ -1,45 +1,52 @@
-<%@ page contentType="text/html;charset=UTF-8" import="org.jalvarez.apiservlet.webapp.headers.models.*"%>
-<%
-    Carro carro = (Carro) session.getAttribute("carro");
-%>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
         <title>Carro de compras</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     </head>
     <body>
+        <div class="container">
         <h1>Carro de compras</h1>
-        <% if (carro == null || carro.getItems().isEmpty()) { %>
-            <p>Lo sentimos, no hay productos en el carro</p>
-        <% } else { %>
-        <form name="formcarro" action="<%=request.getContextPath()%>/carro/actualizar" method="post">
-        <table>
+        <c:choose>
+        <c:when test="${sessionScope.carro == null || sessionScope.carro.items.isEmpty()}">
+            <div class="alert alert-warning"> Lo sentimos, no hay productos en el carro</div>
+        </c:when>
+        <c:otherwise>
+        <form name="formcarro" action="${pageContext.request.contextPath}/carro/actualizar" method="post">
+        <table class="table table-hover table-striped">
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Borrar</th>
                 </tr>
-                <% for (ItemCarro item : carro.getItems()) { %>
+            <c:forEach items="${carro.items}" var="item">
                     <tr>
-                        <td><%= item.getProducto().getId() %></td>
-                        <td><%= item.getProducto().getNombre() %></td>
-                        <td><%= item.getProducto().getPrecio() %></td>
-                        <td><input type="text" size="4" name="cant_<%=item.getProducto().getId()%>" value="<%=item.getCantidad()%>" /></td>
-                        <td><%= item.getImporte() %></td>
-                        <td><input type="checkbox" value="<%=item.getProducto().getId()%>" name="deleteProductos" />
-                        Eliminar productos</td>
+                        <td>${item.producto.id}</td>
+                        <td>${item.producto.nombre}</td>
+                        <td>${item.producto.precio}</td>
+                        <td><input type="text" size="4" name="cant_${item.producto.id}" value="${item.cantidad}" /></td>
+                        <td>${item.importe}</td>
+                        <td><input type="checkbox" value="${item.producto.id}" name="deleteProductos"/></td>
                     </tr>
-                <% } %>
+            </c:forEach>
                 <tr>
-                    <td colspan="4" style="text-align:right">Total:</td>
-                    <td><%= carro.getTotal() %></td>
+                    <td colspan="5" style="text-align:right">Total:</td>
+                    <td>${carro.total}</td>
                 </tr>
             </table>
-            <a href="javascript:document.formcarro.submit();">Actualizar</a>
+            <a class="btn btn btn-primary" href="javascript:document.formcarro.submit();">Actualizar</a>
         </form>
-
-        <%} %>
-        <p><a href="<%=request.getContextPath()%>/productos">Seguir comprando</a></p>
-        <p><a href="<%=request.getContextPath()%>/index.html">Volver al inicio</a></p>
+        </c:otherwise>
+        </c:choose>
+        <div class="my-2">
+            <a class="btn btn-sm btn-secondary" href="${pageContext.request.contextPath}/index.html">Volver al inicio</a>
+            <a class="btn btn-sm btn-success" href="${pageContext.request.contextPath}/productos">Seguir comprando</a>
+        </div>
+        </div>
     </body>
 </html>
