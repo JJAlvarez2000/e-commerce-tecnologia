@@ -5,7 +5,9 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jalvarez.apiservlet.webapp.headers.utils.ConexionJDBC;
+import org.jalvarez.apiservlet.webapp.headers.utils.ConexionJdbsDS;
 
+import javax.naming.NamingException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,7 +16,7 @@ import java.sql.SQLException;
 public class ConexionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        try (Connection conn = ConexionJDBC.getConnection()) {
+        try (Connection conn = ConexionJdbsDS.getConnection()) {
             System.out.println("Conexión abierta");
             if(conn.getAutoCommit()) {
                 conn.setAutoCommit(false);
@@ -29,7 +31,7 @@ public class ConexionFilter implements Filter {
                 ((HttpServletResponse) servletResponse).sendError(500, "Error en la transacción");
                 e.printStackTrace();
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | NamingException throwables) {
             throwables.printStackTrace(System.out);
         }
     }
