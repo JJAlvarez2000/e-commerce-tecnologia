@@ -1,6 +1,7 @@
 package org.jalvarez.apiservlet.webapp.headers.controllers;
 
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -13,8 +14,10 @@ import java.util.Optional;
 
 @WebServlet({"/logout.html", "/logout"})
 public class LogoutServlet extends HttpServlet {
+    @Inject
+    private LoginService auth;
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        LoginService auth = new LoginServiceSessionImpl();
+//        LoginService auth = new LoginServiceSessionImpl();
         Optional<String> username = auth.getUserName(req);
         if(username.isPresent()){
             HttpSession session = req.getSession();

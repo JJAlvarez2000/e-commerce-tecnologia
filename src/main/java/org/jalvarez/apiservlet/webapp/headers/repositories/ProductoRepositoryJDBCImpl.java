@@ -1,17 +1,39 @@
 package org.jalvarez.apiservlet.webapp.headers.repositories;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.jalvarez.apiservlet.webapp.headers.annotations.MySqlConn;
+import org.jalvarez.apiservlet.webapp.headers.annotations.RepositoryAnnotation;
 import org.jalvarez.apiservlet.webapp.headers.models.Categoria;
 import org.jalvarez.apiservlet.webapp.headers.models.Producto;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+@RepositoryAnnotation
 public class ProductoRepositoryJDBCImpl implements Repository<Producto> {
 
-    private final Connection conn;
-    public ProductoRepositoryJDBCImpl(Connection conn) {
-        this.conn = conn;
+    @Inject
+    private Logger log;
+    @Inject
+    @MySqlConn
+    private Connection conn;
+//    public ProductoRepositoryJDBCImpl(Connection conn) {
+//        this.conn = conn;
+//    }
+
+    @PostConstruct
+    public void inicializar(){
+        log.info("Inicializando el beans: " + this.getClass().getName());
+    }
+
+    @PreDestroy
+    public void destruir(){
+        log.info("Destruyendo el beans: " + this.getClass().getName());
     }
 
     @Override

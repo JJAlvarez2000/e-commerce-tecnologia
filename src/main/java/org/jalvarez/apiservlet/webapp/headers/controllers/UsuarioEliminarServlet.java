@@ -1,5 +1,6 @@
 package org.jalvarez.apiservlet.webapp.headers.controllers;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,11 +16,14 @@ import java.util.Optional;
 
 @WebServlet("/usuarios/eliminar")
 public class UsuarioEliminarServlet extends HttpServlet {
+
+    @Inject
+    private UsuarioService service;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Connection conn = (Connection) req.getAttribute("conn");
-        UsuarioService service = new UsuarioServiceImpl(conn);
+//        Connection conn = (Connection) req.getAttribute("conn");
+//        UsuarioService service = new UsuarioServiceImpl(conn);
         long id;
         try {
             id = Long.parseLong(req.getParameter("id"));

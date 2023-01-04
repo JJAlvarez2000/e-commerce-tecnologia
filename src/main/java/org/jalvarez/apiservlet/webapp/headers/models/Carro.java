@@ -1,14 +1,40 @@
 package org.jalvarez.apiservlet.webapp.headers.models;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.inject.Inject;
+import org.jalvarez.apiservlet.webapp.headers.annotations.CarroCompra;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
-public class Carro {
+// Asi se define un bean de sesion en CDI
+// Se puede acceder a el desde cualquier parte de la aplicacion
+// siempre se implementa a la clase el interface Serializable para que pueda ser serializado
+
+@CarroCompra
+public class Carro implements Serializable {
     private List<ItemCarro> items;
+//    public Carro() {
+//        this.items = new ArrayList<>();
+//    }
 
-    public Carro() {
+    // transient es dado que no se puede serializar un objeto de tipo Logger
+    // y se debe de inicializar en el metodo @PostConstruct
+    @Inject
+    private transient Logger log;
+    @PostConstruct
+    public void inicializar() {
         this.items = new ArrayList<>();
+        log.info("Inicializando carro de compra");
+    }
+
+    @PreDestroy
+    public void destruir() {
+        log.info("Destruyendo carro de compra");
     }
 
     public void addItem(ItemCarro itemCarro) {

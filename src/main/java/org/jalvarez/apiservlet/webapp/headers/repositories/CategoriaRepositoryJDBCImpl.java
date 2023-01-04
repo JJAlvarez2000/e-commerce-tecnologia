@@ -1,17 +1,26 @@
 package org.jalvarez.apiservlet.webapp.headers.repositories;
 
+import jakarta.inject.Inject;
+import org.jalvarez.apiservlet.webapp.headers.annotations.MySqlConn;
+import org.jalvarez.apiservlet.webapp.headers.annotations.RepositoryAnnotation;
 import org.jalvarez.apiservlet.webapp.headers.models.Categoria;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@RepositoryAnnotation
 public class CategoriaRepositoryJDBCImpl implements Repository<Categoria> {
     private Connection conn;
 
-    public CategoriaRepositoryJDBCImpl(Connection conn) {
+    // en vez de atributos como por ejemplo el de producto lo haremos por
+    // constructor
+
+    @Inject
+    public CategoriaRepositoryJDBCImpl(@MySqlConn Connection conn) {
         this.conn = conn;
     }
+
     @Override
     public List<Categoria> listar() throws SQLException {
         List<Categoria> categorias = new ArrayList<>();

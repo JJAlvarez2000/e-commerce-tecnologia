@@ -42,13 +42,14 @@ public class AplicacionListener implements ServletContextListener,
     }
 
 
-    @Override
-    public void sessionCreated(HttpSessionEvent se) {
+    // esto ya no aplica dado que se usa CDI de manera automatica
+   @Override
+   public void sessionCreated(HttpSessionEvent se) {
         servletContext.log("Iniciando una sesión");
-        Carro carro = new Carro();
-        HttpSession session = se.getSession();
-        session.setAttribute("carro", carro);
-    }
+//        CarroCompra carro = new CarroCompra();
+//        HttpSession session = se.getSession();
+//        session.setAttribute("carro", carro);
+   }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {

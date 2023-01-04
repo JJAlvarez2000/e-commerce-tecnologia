@@ -1,17 +1,23 @@
 package org.jalvarez.apiservlet.webapp.headers.repositories;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.jalvarez.apiservlet.webapp.headers.annotations.MySqlConn;
+import org.jalvarez.apiservlet.webapp.headers.annotations.RepositoryAnnotation;
 import org.jalvarez.apiservlet.webapp.headers.models.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@RepositoryAnnotation
 public class UsuarioRepositoryImpl implements UsuarioRepository {
+    @Inject
+    @MySqlConn
     private Connection conn;
-
-    public UsuarioRepositoryImpl(Connection conn) {
-        this.conn = conn;
-    }
+//    public UsuarioRepositoryImpl(Connection conn) {
+//        this.conn = conn;
+//    }
     @Override
     public Usuario porUsername(String username) throws SQLException {
         Usuario usuario = null;

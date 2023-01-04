@@ -1,13 +1,11 @@
 package org.jalvarez.apiservlet.webapp.headers.controllers;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.jalvarez.apiservlet.webapp.headers.models.Usuario;
-import org.jalvarez.apiservlet.webapp.headers.services.LoginService;
-import org.jalvarez.apiservlet.webapp.headers.services.LoginServiceSessionImpl;
-import org.jalvarez.apiservlet.webapp.headers.services.UsuarioService;
-import org.jalvarez.apiservlet.webapp.headers.services.UsuarioServiceImpl;
+import org.jalvarez.apiservlet.webapp.headers.services.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,9 +15,13 @@ import java.util.Optional;
 @WebServlet({"/login", "/login.html"})
 public class LoginServlet extends HttpServlet {
 
+    @Inject
+    private LoginService auth;
+    @Inject
+    private UsuarioService service;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        LoginService auth = new LoginServiceSessionImpl();
+//        LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUserName(req);
 
         if (usernameOptional.isPresent()) {
@@ -51,8 +53,8 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        UsuarioService usuarioService = new UsuarioServiceImpl((Connection) req.getAttribute("conn"));
-        Optional<Usuario> usuarioOptional = usuarioService.login(username, password);
+        // UsuarioService usuarioService = new UsuarioServiceImpl((Connection) req.getAttribute("conn"));
+        Optional<Usuario> usuarioOptional = service.login(username, password);
 
         if (usuarioOptional.isPresent()) {
             HttpSession session = req.getSession();

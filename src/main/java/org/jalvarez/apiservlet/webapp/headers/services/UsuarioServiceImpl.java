@@ -1,5 +1,8 @@
 package org.jalvarez.apiservlet.webapp.headers.services;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.jalvarez.apiservlet.webapp.headers.annotations.Service;
 import org.jalvarez.apiservlet.webapp.headers.exceptions.ServiceJDBCException;
 import org.jalvarez.apiservlet.webapp.headers.models.Usuario;
 import org.jalvarez.apiservlet.webapp.headers.repositories.UsuarioRepository;
@@ -10,11 +13,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioServiceImpl(Connection connection) {
-        this.usuarioRepository = new UsuarioRepositoryImpl(connection);
+    @Inject
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
     @Override
     public Optional<Usuario> login(String username, String password) {
